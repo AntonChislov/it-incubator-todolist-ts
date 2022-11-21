@@ -7,39 +7,45 @@ function App() {
     const [stateTasks, setStateTasks] = useState([
         {
             id: 1,
-            show: false,
             task: 'HTML&CSS',
             checked: true,
         },
         {
             id: 2,
-            show: false,
             task: 'JS',
             checked: true,
         },
         {
             id: 3,
-            show: false,
             task: 'React',
             checked: false,
         },
     ])
+    const [valueInput, setValueInput] = useState('')
+    const [valueId, setValueId] = useState(3)
 
-    const changeCheked = () => {
-
+    const addTask = () => {
+        if (valueInput) {
+            setValueId(valueId + 1)
+            setStateTasks([...stateTasks, {
+                id: valueId,
+                task: valueInput,
+                checked: false,
+            }])
+        }
+        setValueInput('')
     }
 
     const tasks = stateTasks.map((item, index) => {
-        return <li><input onChange={changeCheked} key={index} type="checkbox" checked={item.checked}/> <span>{item.task}</span></li>
+        return <li key={index}><input type="checkbox" checked={item.checked}/> <span>{item.task}</span></li>
     })
-
     return (
         <div className="App">
             <div>
                 <h3>What to learn</h3>
                 <div>
-                    <input/>
-                    <button>+</button>
+                    <input value={valueInput} onChange={(event) => setValueInput(event.target.value)}/>
+                    <button onClick={addTask}>+</button>
                 </div>
                 <ul>
                     {tasks}
