@@ -23,6 +23,20 @@ function App() {
     ])
     const [valueInput, setValueInput] = useState('')
     const [valueId, setValueId] = useState(3)
+    const [isCompleted, setIsCompleted] = useState(false)
+    const [isActive, setIsActive] = useState(false)
+
+    const addTask = () => {
+        if (valueInput) {
+            setValueId(valueId + 1)
+            setStateTasks([...stateTasks, {
+                id: valueId,
+                task: valueInput,
+                checked: false,
+            }])
+        }
+        setValueInput('')
+    }
 
     const changeCheckbox = (index: number) => {
         if (stateTasks[index].checked) {
@@ -42,21 +56,39 @@ function App() {
         }
     }
 
-    const addTask = () => {
-        if (valueInput) {
-            setValueId(valueId + 1)
-            setStateTasks([...stateTasks, {
-                id: valueId,
-                task: valueInput,
-                checked: false,
-            }])
-        }
-        setValueInput('')
+    const showCompleted = () => {
+        setIsCompleted(true)
     }
+
+    const showActive = () => {
+        setIsActive(true)
+    }
+
+    const showAll = () => {
+        setIsCompleted(false)
+        setIsActive(false)
+    }
+
     const tasks = stateTasks.map((item, index) => {
-        return <li key={index}><input onChange={() => changeCheckbox(index)} type="checkbox" checked={item.checked}/>
-            <span>{item.task}</span></li>
+        if (isCompleted) {
+            if (item.checked) {
+                return <li key={index}><input onChange={() => changeCheckbox(index)} type="checkbox"
+                                              checked={item.checked}/>
+                    <span>{item.task}</span></li>
+            }
+        } else if (isActive) {
+            if (!item.checked) {
+                return <li key={index}><input onChange={() => changeCheckbox(index)} type="checkbox"
+                                              checked={item.checked}/>
+                    <span>{item.task}</span></li>
+            }
+        } else {
+            return <li key={index}><input onChange={() => changeCheckbox(index)} type="checkbox"
+                                          checked={item.checked}/>
+                <span>{item.task}</span></li>
+        }
     })
+
     return (
         <div className="App">
             <div>
@@ -69,9 +101,9 @@ function App() {
                     {tasks}
                 </ul>
                 <div>
-                    <button>All</button>
-                    <button>Active</button>
-                    <button>Completed</button>
+                    <button onClick={showAll}>All</button>
+                    <button onClick={showActive}>Active</button>
+                    <button onClick={showCompleted}>Completed</button>
                 </div>
             </div>
         </div>
