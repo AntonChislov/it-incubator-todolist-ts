@@ -1,7 +1,38 @@
 import React from 'react';
+import {useState} from 'react';
 import './App.css';
 
+
 function App() {
+    const [stateTasks, setStateTasks] = useState([
+        {
+            id: 1,
+            show: false,
+            task: 'HTML&CSS',
+            checked: true,
+        },
+        {
+            id: 2,
+            show: false,
+            task: 'JS',
+            checked: true,
+        },
+        {
+            id: 3,
+            show: false,
+            task: 'React',
+            checked: false,
+        },
+    ])
+
+    const changeCheked = () => {
+
+    }
+
+    const tasks = stateTasks.map((item, index) => {
+        return <li><input onChange={changeCheked} key={index} type="checkbox" checked={item.checked}/> <span>{item.task}</span></li>
+    })
+
     return (
         <div className="App">
             <div>
@@ -11,9 +42,7 @@ function App() {
                     <button>+</button>
                 </div>
                 <ul>
-                    <li><input type="checkbox" checked={true}/> <span>HTML&CSS</span></li>
-                    <li><input type="checkbox" checked={true}/> <span>JS</span></li>
-                    <li><input type="checkbox" checked={false}/> <span>React</span></li>
+                    {tasks}
                 </ul>
                 <div>
                     <button>All</button>
