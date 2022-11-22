@@ -1,6 +1,9 @@
 import React from 'react';
 import {useState} from 'react';
 import './App.css';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
 
 function App() {
@@ -58,10 +61,12 @@ function App() {
 
     const showCompleted = () => {
         setIsCompleted(true)
+        setIsActive(false)
     }
 
     const showActive = () => {
         setIsActive(true)
+        setIsCompleted(false)
     }
 
     const showAll = () => {
@@ -92,18 +97,23 @@ function App() {
     return (
         <div className="App">
             <div>
-                <h3>What to learn</h3>
+                <Typography color={"primary"} variant="h5" gutterBottom>
+                    What to learn
+                </Typography>
                 <div>
-                    <input value={valueInput} onChange={(event) => setValueInput(event.target.value)}/>
-                    <button onClick={addTask}>+</button>
+                    <TextField color={"primary"} size='small' sx={{
+                        color: "white"
+                    }} value={valueInput} onChange={(event) => setValueInput(event.target.value)}
+                               id="outlined-basic" label="Write task" variant="outlined"/>
+                    <Button onClick={addTask} >Add</Button>
                 </div>
                 <ul>
                     {tasks}
                 </ul>
                 <div>
-                    <button onClick={showAll}>All</button>
-                    <button onClick={showActive}>Active</button>
-                    <button onClick={showCompleted}>Completed</button>
+                    <Button onClick={showAll}>All</Button>
+                    <Button onClick={showActive}>Active</Button>
+                    <Button onClick={showCompleted}>Completed</Button>
                 </div>
             </div>
         </div>
