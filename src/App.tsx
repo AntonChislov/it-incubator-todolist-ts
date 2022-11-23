@@ -4,6 +4,7 @@ import './App.css';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import Checkbox from '@mui/material/Checkbox';
 
 
 function App() {
@@ -77,18 +78,18 @@ function App() {
     const tasks = stateTasks.map((item, index) => {
         if (isCompleted) {
             if (item.checked) {
-                return <li key={index}><input onChange={() => changeCheckbox(index)} type="checkbox"
+                return <li key={index}><Checkbox size="small" onChange={() => changeCheckbox(index)}
                                               checked={item.checked}/>
                     <span>{item.task}</span></li>
             }
         } else if (isActive) {
             if (!item.checked) {
-                return <li key={index}><input onChange={() => changeCheckbox(index)} type="checkbox"
+                return <li key={index}><Checkbox size="small" onChange={() => changeCheckbox(index)}
                                               checked={item.checked}/>
                     <span>{item.task}</span></li>
             }
         } else {
-            return <li key={index}><input onChange={() => changeCheckbox(index)} type="checkbox"
+            return <li key={index}><Checkbox size="small" onChange={() => changeCheckbox(index)}
                                           checked={item.checked}/>
                 <span>{item.task}</span></li>
         }
@@ -101,9 +102,7 @@ function App() {
                     What to learn
                 </Typography>
                 <div>
-                    <TextField color={"primary"} size='small' sx={{
-                        color: "white"
-                    }} value={valueInput} onChange={(event) => setValueInput(event.target.value)}
+                    <TextField color={"primary"} size='small' value={valueInput} onChange={(event) => setValueInput(event.target.value)}
                                id="outlined-basic" label="Write task" variant="outlined"/>
                     <Button onClick={addTask} >Add</Button>
                 </div>
