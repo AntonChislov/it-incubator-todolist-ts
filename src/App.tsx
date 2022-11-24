@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Checkbox from '@mui/material/Checkbox';
-
+import {useSpring, animated} from 'react-spring'
 
 function App() {
     const [stateTasks, setStateTasks] = useState([
@@ -29,6 +29,10 @@ function App() {
     const [valueId, setValueId] = useState(3)
     const [isCompleted, setIsCompleted] = useState(false)
     const [isActive, setIsActive] = useState(false)
+    const header = useSpring({vector: [0, 10, 30], to: {opacity: 1}, from: {opacity: 0}, config: {duration: 600}})
+    const input = useSpring({to: {opacity: 1}, from: {opacity: 0}, config: {duration: 700}})
+    const checkbox = useSpring({to: {opacity: 1}, from: {opacity: 0}, config: {duration: 800}})
+    const buttons = useSpring({to: {opacity: 1}, from: {opacity: 0}, config: {duration: 900}})
 
     const addTask = () => {
         if (valueInput) {
@@ -79,41 +83,44 @@ function App() {
         if (isCompleted) {
             if (item.checked) {
                 return <li key={index}><Checkbox size="small" onChange={() => changeCheckbox(index)}
-                                              checked={item.checked}/>
+                                                 checked={item.checked}/>
                     <span>{item.task}</span></li>
             }
         } else if (isActive) {
             if (!item.checked) {
                 return <li key={index}><Checkbox size="small" onChange={() => changeCheckbox(index)}
-                                              checked={item.checked}/>
+                                                 checked={item.checked}/>
                     <span>{item.task}</span></li>
             }
         } else {
             return <li key={index}><Checkbox size="small" onChange={() => changeCheckbox(index)}
-                                          checked={item.checked}/>
+                                             checked={item.checked}/>
                 <span>{item.task}</span></li>
         }
     })
 
     return (
         <div className="App">
-            <div>
-                <Typography color={"primary"} variant="h5" gutterBottom>
-                    What to learn
-                </Typography>
-                <div>
-                    <TextField color={"primary"} size='small' value={valueInput} onChange={(event) => setValueInput(event.target.value)}
+            <div className="box">
+                <animated.div style={header}>
+                    <Typography color={"primary"} variant="h5" gutterBottom>
+                        What to learn
+                    </Typography>
+                </animated.div>
+                <animated.div style={input}>
+                    <TextField color={"primary"} size='small' value={valueInput}
+                               onChange={(event) => setValueInput(event.target.value)}
                                id="outlined-basic" label="Write task" variant="outlined"/>
-                    <Button onClick={addTask} >Add</Button>
-                </div>
-                <ul>
+                    <Button onClick={addTask}>Add</Button>
+                </animated.div>
+                <animated.ul style={checkbox}>
                     {tasks}
-                </ul>
-                <div>
+                </animated.ul>
+                <animated.div style={buttons}>
                     <Button onClick={showAll}>All</Button>
                     <Button onClick={showActive}>Active</Button>
                     <Button onClick={showCompleted}>Completed</Button>
-                </div>
+                </animated.div>
             </div>
         </div>
     );
