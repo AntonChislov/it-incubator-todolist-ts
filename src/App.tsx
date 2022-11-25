@@ -29,16 +29,10 @@ function App() {
     const [valueId, setValueId] = useState(3)
     const [isCompleted, setIsCompleted] = useState(false)
     const [isActive, setIsActive] = useState(false)
-    const header = useSpring({from: {opacity: 0}, to: {opacity: 1}, config: {duration: 1000}})
-    const input = useSpring({from: {opacity: 0}, to: {opacity: 1}, config: {duration: 700}})
-    const checkbox = useSpring({from: {opacity: 0}, to: {opacity: 1}, config: {duration: 800}})
-    const buttons = useSpring({from: {opacity: 0}, to: {opacity: 1}, config: {duration: 900}})
-    const [state, toggle] = useState(true)
-    const {x} = useSpring({
-        from: {x: 0},
-        x: state ? 1 : 0,
-        config: {duration: 1000},
-    })
+    const header = useSpring({vector: [0, 10, 30], to: {opacity: 1}, from: {opacity: 0}, config: {duration: 600}})
+    const input = useSpring({to: {opacity: 1}, from: {opacity: 0}, config: {duration: 700}})
+    const checkbox = useSpring({to: {opacity: 1}, from: {opacity: 0}, config: {duration: 800}})
+    const buttons = useSpring({to: {opacity: 1}, from: {opacity: 0}, config: {duration: 900}})
 
     const addTask = () => {
         if (valueInput) {
@@ -81,8 +75,8 @@ function App() {
     }
 
     const showAll = () => {
-        setIsActive(false)
         setIsCompleted(false)
+        setIsActive(false)
     }
 
     const tasks = stateTasks.map((item, index) => {
@@ -108,12 +102,7 @@ function App() {
     return (
         <div className="App">
             <div className="box">
-                <animated.div onClick={() => toggle(!state)} style={{
-                    scale: x.to({
-                        range: [0, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 1],
-                        output: [1, 0.97, 0.9, 1.1, 0.9, 1.1, 1.03, 1],
-                    }),
-                }}>
+                <animated.div style={header}>
                     <Typography color={"primary"} variant="h5" gutterBottom>
                         What to learn
                     </Typography>
