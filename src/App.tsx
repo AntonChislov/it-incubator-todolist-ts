@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
 import './App.css';
 import {TodoList} from "./TodoList";
+import {v1} from "uuid";
 
 export interface TasksType {
-    id: number
+    id: string
     title: string
     isDone: boolean
 }
@@ -12,21 +13,21 @@ export type FilterValueType = 'all' | 'active' | 'completed'
 
 function App() {
     const [tasks, setTasks] = useState([
-        {id: 1, isDone: true, title: 'eat'},
-        {id: 2, isDone: true, title: 'sleep'},
-        {id: 3, isDone: false, title: '123'},
-        {id: 4, isDone: false, title: '456'},
+        {id: v1(), isDone: true, title: 'eat'},
+        {id: v1(), isDone: true, title: 'sleep'},
+        {id: v1(), isDone: false, title: '123'},
+        {id: v1(), isDone: false, title: '456'},
     ])
     const [filterTasks, setFilterTasks] = useState<FilterValueType>('all')
     let tasksForTodoList: Array<TasksType> = tasks
 
     if (filterTasks === 'active') {
-        tasksForTodoList = tasks.filter( item => item.isDone === false)
+        tasksForTodoList = tasks.filter( item => !item.isDone)
     } else if (filterTasks === 'completed') {
-        tasksForTodoList = tasks.filter( item => item.isDone === true)
+        tasksForTodoList = tasks.filter( item => item.isDone)
     }
 
-    const deleteTask = (id: number) => {
+    const deleteTask = (id: string) => {
         setTasks(tasks.filter( item => item.id != id))
     }
 
