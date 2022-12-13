@@ -6,27 +6,15 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Checkbox from '@mui/material/Checkbox';
 import {useSpring, animated} from 'react-spring'
+import {v1} from "uuid";
 
 function App() {
     const [stateTasks, setStateTasks] = useState([
-        {
-            id: 1,
-            task: 'HTML&CSS',
-            checked: true,
-        },
-        {
-            id: 2,
-            task: 'JS',
-            checked: true,
-        },
-        {
-            id: 3,
-            task: 'React',
-            checked: false,
-        },
+        {id: v1(), task: 'HTML&CSS', checked: true},
+        {id: v1(), task: 'JS', checked: true},
+        {id: v1(), task: 'React', checked: false}
     ])
     const [valueInput, setValueInput] = useState('')
-    const [valueId, setValueId] = useState(3)
     const [isCompleted, setIsCompleted] = useState(false)
     const [isActive, setIsActive] = useState(false)
     const input = useSpring({to: {opacity: 1}, from: {opacity: 0}, config: {duration: 700}})
@@ -41,9 +29,8 @@ function App() {
 
     const addTask = () => {
         if (valueInput) {
-            setValueId(valueId + 1)
             setStateTasks([...stateTasks, {
-                id: valueId,
+                id: v1(),
                 task: valueInput,
                 checked: false,
             }])
@@ -109,9 +96,9 @@ function App() {
             <div className="box">
                 <animated.div onClick={() => toggle(!state)} style={{
                     scale: x.to({
-                    range: [0, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 1],
-                    output: [1, 0.97, 0.9, 1.1, 0.9, 1.1, 1.03, 1],
-                }),
+                        range: [0, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 1],
+                        output: [1, 0.97, 0.9, 1.1, 0.9, 1.1, 1.03, 1],
+                    }),
                 }}>
                     <Typography color={"primary"} variant="h5" gutterBottom>
                         What to learn
