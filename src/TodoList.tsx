@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './App.css';
 import {FilterValueType, TasksType} from "./App";
 
@@ -11,12 +11,14 @@ interface TodoListPropsType {
 
 export const TodoList: React.FC<TodoListPropsType> = ({title, tasks, deleteTask, setFilterTasks}) => {
 
+    const [taskText, setTaskText] = useState('')
+
     return (
         <div>
             <h3>{title}</h3>
             <div>
-                <input/>
-                <button>+</button>
+                {/*<textarea onChange={() => setTaskText((event ) => event.target.value)} value={taskText}/>*/}
+                <button >+</button>
             </div>
             <ul>
                 {tasks.map(el => <li key={el.id}><input type="checkbox" checked={el.isDone}/> <span>{el.title}</span>
