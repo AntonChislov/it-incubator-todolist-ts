@@ -39,21 +39,13 @@ function App() {
     }
 
     const changeCheckbox = (index: number) => {
-        if (stateTasks[index].checked) {
-            const res = [
-                ...stateTasks.slice(0, index),
-                {...stateTasks[index], checked: false},
-                ...stateTasks.slice(index + 1)
-            ]
-            setStateTasks(res)
-        } else {
-            const res = [
-                ...stateTasks.slice(0, index),
-                {...stateTasks[index], checked: true},
-                ...stateTasks.slice(index + 1)
-            ]
-            setStateTasks(res)
-        }
+        const isChecked = stateTasks[index].checked
+        const res = [
+            ...stateTasks.slice(0, index),
+            {...stateTasks[index], checked: !isChecked},
+            ...stateTasks.slice(index + 1)
+        ]
+        setStateTasks(res)
     }
 
     const showCompleted = () => {
