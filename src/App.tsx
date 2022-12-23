@@ -19,7 +19,11 @@ function App() {
         {id: v1(), isDone: false, title: '123'},
         {id: v1(), isDone: false, title: '456'},
     ])
+
+    const [error, setError] = useState<string | null>(null)
+
     const [filterTasks, setFilterTasks] = useState<FilterValueType>('all')
+
     let tasksForTodoList: Array<TasksType> = tasks
 
     if (filterTasks === 'active') {
@@ -33,37 +37,23 @@ function App() {
     }
 
     const addTask = (taskText: string) => {
-        if (taskText && taskText.trim() !== '') setTasks([{id: v1(), isDone: false, title: taskText}, ...tasks])
+        if (taskText.trim() !== '') {
+            setTasks([{id: v1(), isDone: false, title: taskText}, ...tasks])
+        } else {
+            setError('Field is required')
+        }
     }
 
-    const checkedHandle = (taskId: string) => {
+    const checkedHandle = (taskId: string, value: boolean) => {
         const task = tasks.find(t => t.id === taskId)
-        if (task) task.isDone = !task.isDone
+        if (task) task.isDone = value
 
         setTasks([...tasks])
     }
 
-    /*const checkedHandle = (index: number) => {
-        let checkedTasks = []
-        if (tasks[index].isDone) {
-            checkedTasks = [
-                ...tasks.slice(0, index),
-                {...tasks[index], isDone: false},
-                ...tasks.slice(index + 1)
-            ]
-        } else {
-            checkedTasks = [
-                ...tasks.slice(0, index),
-                {...tasks[index], isDone: true},
-                ...tasks.slice(index + 1)
-            ]
-        }
-        setTasks(checkedTasks)
-    }*/
-
     return (
         <div className="App">
-            <TodoList checkedHandle={checkedHandle} addTask={addTask} tasks={tasksForTodoList} title={'What to learn'} deleteTask={deleteTask}
+            <TodoList filterTasks={filterTasks} error={error} setError={setError} checkedHandle={checkedHandle} addTask={addTask} tasks={tasksForTodoList} title={'What to learn'} deleteTask={deleteTask}
                       setFilterTasks={setFilterTasks}/>
         </div>
     );
