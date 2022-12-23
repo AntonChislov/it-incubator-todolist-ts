@@ -8,9 +8,10 @@ interface TodoListPropsType {
     deleteTask: (id: string) => void
     setFilterTasks: (value: FilterValueType) => void
     addTask: (taskText: string) => void
+    checkedHandle: (taskId: string) => void
 }
 
-export const TodoList: React.FC<TodoListPropsType> = ({addTask, title, tasks, deleteTask, setFilterTasks}) => {
+export const TodoList: React.FC<TodoListPropsType> = ({checkedHandle, addTask, title, tasks, deleteTask, setFilterTasks}) => {
 
     const [taskText, setTaskText] = useState('')
 
@@ -38,7 +39,10 @@ export const TodoList: React.FC<TodoListPropsType> = ({addTask, title, tasks, de
                 <button onClick={onClickAddTask}>+</button>
             </div>
             <ul>
-                {tasks.map(el => <li key={el.id}><input type="checkbox" checked={el.isDone}/> <span>{el.title}</span>
+                {tasks.map((el, index) => <li key={el.id}>
+                    <input onChange={() => checkedHandle(el.id)} type="checkbox"
+                           checked={el.isDone}/>
+                    <span>{el.title}</span>
                     <button onClick={() => deleteTask(el.id)}>x</button>
                 </li>)}
             </ul>

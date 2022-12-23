@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import './App.css';
 import {TodoList} from "./TodoList";
 import {v1} from "uuid";
+import set = Reflect.set;
 
 export interface TasksType {
     id: string
@@ -22,22 +23,48 @@ function App() {
     let tasksForTodoList: Array<TasksType> = tasks
 
     if (filterTasks === 'active') {
-        tasksForTodoList = tasks.filter( item => !item.isDone)
+        tasksForTodoList = tasks.filter(item => !item.isDone)
     } else if (filterTasks === 'completed') {
-        tasksForTodoList = tasks.filter( item => item.isDone)
+        tasksForTodoList = tasks.filter(item => item.isDone)
     }
 
     const deleteTask = (id: string) => {
-        setTasks(tasks.filter( item => item.id != id))
+        setTasks(tasks.filter(item => item.id != id))
     }
 
     const addTask = (taskText: string) => {
-        if (taskText) setTasks([{ id: v1(), isDone: false, title: taskText }, ...tasks])
+        if (taskText && taskText.trim() !== '') setTasks([{id: v1(), isDone: false, title: taskText}, ...tasks])
     }
+
+    const checkedHandle = (taskId: string) => {
+        const task = tasks.find(t => t.id === taskId)
+        if (task) task.isDone = !task.isDone
+
+        setTasks([...tasks])
+    }
+
+    /*const checkedHandle = (index: number) => {
+        let checkedTasks = []
+        if (tasks[index].isDone) {
+            checkedTasks = [
+                ...tasks.slice(0, index),
+                {...tasks[index], isDone: false},
+                ...tasks.slice(index + 1)
+            ]
+        } else {
+            checkedTasks = [
+                ...tasks.slice(0, index),
+                {...tasks[index], isDone: true},
+                ...tasks.slice(index + 1)
+            ]
+        }
+        setTasks(checkedTasks)
+    }*/
 
     return (
         <div className="App">
-            <TodoList addTask={addTask} tasks={tasksForTodoList} title={'What to learn'} deleteTask={deleteTask} setFilterTasks={setFilterTasks}/>
+            <TodoList checkedHandle={checkedHandle} addTask={addTask} tasks={tasksForTodoList} title={'What to learn'} deleteTask={deleteTask}
+                      setFilterTasks={setFilterTasks}/>
         </div>
     );
 }
