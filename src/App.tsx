@@ -4,13 +4,13 @@ import {TodoList} from "./TodoList";
 import {v1} from "uuid";
 import {AddItemForm} from "./AddItemForm";
 
-export interface TasksType {
+export type TasksType = {
     id: string
     title: string
     isDone: boolean
 }
 
-type TodolistType = {
+export type TodolistType = {
     id: string
     title: string
     filter: FilterValueType
