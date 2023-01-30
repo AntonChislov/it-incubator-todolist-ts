@@ -1,8 +1,20 @@
-import React, {useState} from 'react';
+import React, {useReducer} from 'react';
 import './App.css';
 import {TodoList} from "./TodoList";
 import {v1} from "uuid";
 import {AddItemForm} from "./AddItemForm";
+import {
+    actionCreateAddTodolist, actionCreateChangeTodolist,
+    actionCreateRemoveTodolist,
+    actionCreateSetFilter,
+    todolistReducer
+} from './reducers/todolist-reducer';
+import {
+    addTaskActionCreator, addTaskForTodolistActionCreator, changeIsDoneActionCreator, changeTaskActionCreator,
+    deleteAllTaskActionCreator,
+    deleteTaskActionCreator,
+    taskReducer
+} from './reducers/task-reducer';
 
 export type TasksType = {
     id: string
@@ -23,12 +35,12 @@ function App() {
     const todolistId1 = v1()
     const todolistId2 = v1()
 
-    const [todolists, setTodolist] = useState<Array<TodolistType>>([
+    const [todolists, dispatchTL] = useReducer(todolistReducer, [
         {id: todolistId1, title: 'What to learn', filter: 'all'},
         {id: todolistId2, title: 'What to buy', filter: 'all'}
     ])
 
-    const [tasks, setTasks] = useState({
+    const [tasks, dispatchTasks] = useReducer(taskReducer, {
         [todolistId1]: [
             {id: v1(), isDone: true, title: 'eat'},
             {id: v1(), isDone: true, title: 'sleep'},
@@ -40,61 +52,40 @@ function App() {
     })
 
     const removeTodolist = (todolistId: string) => {
-        setTodolist(todolists.filter(tl => tl.id !== todolistId))
-        delete tasks[todolistId]
+        dispatchTL(actionCreateRemoveTodolist(todolistId))
+        dispatchTasks(deleteAllTaskActionCreator(todolistId))
     }
 
     const deleteTask = (id: string, todolistId: string) => {
-        const todolist = tasks[todolistId]
-        tasks[todolistId] = todolist.filter(item => item.id != id)
-        setTasks({...tasks})
+        dispatchTasks(deleteTaskActionCreator(todolistId, id))
     }
 
     const addTask = (taskText: string, todolistId: string) => {
-        const todolist = tasks[todolistId]
         if (taskText.trim() !== '') {
-            tasks[todolistId] = [{id: v1(), isDone: false, title: taskText}, ...todolist]
-            setTasks({...tasks})
+            dispatchTasks(addTaskActionCreator(todolistId, taskText, false))
         }
     }
 
     const checkedHandle = (taskId: string, value: boolean, todolistId: string) => {
-        const todolist = tasks[todolistId]
-        const task = todolist.find(t => t.id === taskId)
-        if (task) task.isDone = value
-        tasks[todolistId] = todolist
-        setTasks({...tasks})
+        dispatchTasks(changeIsDoneActionCreator(todolistId, taskId, value))
     }
 
     const setFilterTasks = (value: FilterValueType, todolistId: string) => {
-        const todolist = todolists.find(tl => tl.id === todolistId)
-        if (todolist) {
-            todolist.filter = value
-            setTodolist([...todolists])
-        }
+        dispatchTL(actionCreateSetFilter(todolistId, value))
     }
 
     const addTodolist = (title: string) => {
         const todolistId = v1()
-        const todolist: TodolistType = {id: todolistId, title: title, filter: 'all'}
-        setTodolist([todolist, ...todolists])
-        setTasks({
-            ...tasks,
-            [todolistId]: []
-        })
+        dispatchTL(actionCreateAddTodolist(title, todolistId))
+        dispatchTasks(addTaskForTodolistActionCreator(todolistId))
     }
 
     const changeTask = (title: string, taskId: string, todolistId: string) => {
-        const todolist = tasks[todolistId]
-        const task = todolist.find(t => t.id === taskId)
-        if (task) task.title = title
-        setTasks({...tasks})
+        dispatchTasks(changeTaskActionCreator(todolistId, taskId, title))
     }
 
     const changeTodolist = (title: string, todolistId: string) => {
-        const todolist = todolists.find(t => t.id === todolistId)
-        if (todolist) todolist.title = title
-        setTodolist([...todolists])
+        dispatchTL(actionCreateChangeTodolist(todolistId, title))
     }
 
     return (

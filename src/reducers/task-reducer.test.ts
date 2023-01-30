@@ -2,7 +2,7 @@ import {v1} from 'uuid';
 import {
     addTaskActionCreator,
     changeIsDoneActionCreator,
-    changeTaskActionCreator,
+    changeTaskActionCreator, deleteAllTaskActionCreator,
     deleteTaskActionCreator,
     taskReducer
 } from './task-reducer';
@@ -59,6 +59,33 @@ test('delete task', () => {
     expect(newTasks[todolistId1].length).toBe(1)
     expect(newTasks[todolistId1][0].isDone).toBe(true)
     expect(newTasks[todolistId1][0].title).toBe('sleep')
+})
+
+test.skip('delete all task', () => {
+
+    const todolistId1 = v1()
+    const todolistId2 = v1()
+    const taskId1 = v1()
+    const taskId2 = v1()
+    const taskId3= v1()
+    const taskId4 = v1()
+
+    const tasks = {
+        [todolistId1]: [
+            {id: taskId1, isDone: false, title: 'eat'},
+            {id: taskId2, isDone: true, title: 'sleep'},
+        ],
+        [todolistId2]: [
+            {id: taskId3, isDone: false, title: '123'},
+            {id: taskId4, isDone: false, title: '456'},
+        ]
+    }
+
+    const action = deleteAllTaskActionCreator(todolistId1)
+
+    const newTasks = taskReducer(tasks, action)
+
+    // expect().toBe()
 })
 
 test('change title task', () => {

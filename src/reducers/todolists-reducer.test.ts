@@ -33,7 +33,7 @@ test('add todolist', () => {
         {id: todolistId1, title: 'What to learn', filter: 'all'},
         {id: todolistId2, title: 'What to buy', filter: 'all'}]
 
-    const action = actionCreateAddTodolist('What to break')
+    const action = actionCreateAddTodolist('What to break', todolistId1)
 
     const newTodolists = todolistReducer(todolists, action)
 

@@ -8,6 +8,7 @@ type RemoveTodolistType = {
 type AddTodolistType = {
     type: 'ADD_TODOLIST'
     title: string
+    todolistId: string
 }
 type SetFilterType = {
     type: 'SET_FILTER'
@@ -28,11 +29,13 @@ export const todolistReducer = (state: Array<TodolistType>, action: ActionsType)
             return state.filter(t => t.id != action.todolistId)
         }
         case 'ADD_TODOLIST': {
-            const todolistId = v1()
-            return [
-                ...state,
-                {id: todolistId, title: action.title, filter: 'all'}
-            ]
+            if (action.title !== '') {
+                return [
+                    ...state,
+                    {id: action.todolistId, title: action.title, filter: 'all'}
+                ]
+            }
+            return [...state]
         }
         case 'SET_FILTER': {
             const todolist = state.find(t => t.id === action.todolistId)
@@ -41,7 +44,7 @@ export const todolistReducer = (state: Array<TodolistType>, action: ActionsType)
         }
         case 'CHANGE_TODOLIST_TITLE': {
             const todolist = state.find(t => t.id === action.todolistId)
-            if (todolist) todolist.title = action.title
+            if (todolist && action.title !== '') todolist.title = action.title
             return [...state]
         }
         default:
@@ -53,8 +56,8 @@ export const actionCreateRemoveTodolist = (id: string): RemoveTodolistType => {
     return {type: 'REMOVE_TODOLIST', todolistId: id}
 }
 
-export const actionCreateAddTodolist = (title: string): AddTodolistType => {
-    return {type: 'ADD_TODOLIST', title}
+export const actionCreateAddTodolist = (title: string, todolistId: string): AddTodolistType => {
+    return {type: 'ADD_TODOLIST', title, todolistId}
 }
 
 export const actionCreateSetFilter = (todolistId: string, filter: FilterValueType): SetFilterType => {
